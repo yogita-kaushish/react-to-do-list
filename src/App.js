@@ -1,23 +1,83 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState("");
+  const [editingID, setEditingID] = useState(null);
+  const [editingText, setEditingText] = useState("");
+
+  const handleChange = (event) => {
+    setNewTask(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (newTask.trim() !== "") {
+      setTasks([...tasks, { id: Date.now(), text: newTask }]);
+      setNewTask("");
+    }
+  };
+
+  const handleDelete = (id) => {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
+  };
+
+  const handleEditChange = (event) => {
+    setEditingText(event.target.value);
+  };
+
+  const handleEdit = (id) => {
+    const taskToEdit = tasks.find((task) => task.id === id);
+    setEditingID(id);
+    setEditingText(taskToEdit.text);
+  };
+
+  const handleSave = (id) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, text: editingText } : task
+    );
+    setTasks(updatedTasks);
+    setEditingID(null);
+    setEditingText("");
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={handleSubmit}>
+        <h1>TO-DO List</h1>
+        <input
+          type="text"
+          name="newTask"
+          placeholder="Add Task Here"
+          value={newTask}
+          onChange={handleChange}
+        />
+        <button type="submit" className="btn">Add</button>
+      </form>
+      <div className="Task">
+        {tasks.map((task, index) => (
+          <div key={task.id} className="NewTask">
+            {editingID === task.id ? (
+              <>
+                <input
+                  type="text"
+                  value={editingText}
+                  onChange={handleEditChange}
+                />
+                <button className="btn" onClick={() => handleSave(task.id)}>Save</button>
+              </>
+            ) : (
+              <>
+                <span>{task.text}</span>
+                <button className="btn" onClick={() => handleEdit(task.id)}>Edit</button>
+              </>
+            )}
+            <button className="btn" onClick={() => handleDelete(task.id)}>Delete</button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
