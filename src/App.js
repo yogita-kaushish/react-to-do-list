@@ -35,12 +35,20 @@ function App() {
   };
 
   const handleSave = (id) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === id ? { ...task, text: editingText } : task
-    );
-    setTasks(updatedTasks);
-    setEditingID(null);
-    setEditingText("");
+    const updated_tasks = [...tasks]
+    const tasktoedit = updated_tasks.find((task)=>task.id === id);
+    if (tasktoedit) {
+      tasktoedit.text = editingText
+      setTasks(updated_tasks);
+      setEditingID(null);
+      setEditingText("");
+    }
+    // const updatedTasks = tasks.map((task) =>
+    //   task.id === id ? { ...task, text: editingText } : task
+    // );
+    // setTasks(updatedTasks);
+    // setEditingID(null);
+    // setEditingText("");
   };
 
   return (
