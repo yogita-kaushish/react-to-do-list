@@ -43,12 +43,6 @@ function App() {
       setEditingID(null);
       setEditingText("");
     }
-    // const updatedTasks = tasks.map((task) =>
-    //   task.id === id ? { ...task, text: editingText } : task
-    // );
-    // setTasks(updatedTasks);
-    // setEditingID(null);
-    // setEditingText("");
   };
 
   return (
